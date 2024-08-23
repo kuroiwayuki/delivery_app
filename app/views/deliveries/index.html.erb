@@ -60,5 +60,36 @@
       <%= link_to "最初の記録を作成", new_delivery_path, 
           class: "mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200" %>
     </div>
+  <% else %>
+    <!-- Pagination -->
+    <div class="bg-white border-t border-gray-200 px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-700">
+          <%= @deliveries.offset_value + 1 %>-<%= [@deliveries.offset_value + @deliveries.limit_value, @deliveries.total_count].min %> / <%= @deliveries.total_count %>件
+        </div>
+        <div class="flex items-center space-x-2">
+          <% if @deliveries.current_page > 1 %>
+            <%= link_to "前へ", deliveries_path(page: @deliveries.current_page - 1), 
+                class: "px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" %>
+          <% end %>
+          
+          <% (1..@deliveries.total_pages).each do |page| %>
+            <% if page == @deliveries.current_page %>
+              <span class="px-3 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600 rounded-md">
+                <%= page %>
+              </span>
+            <% else %>
+              <%= link_to page, deliveries_path(page: page), 
+                  class: "px-3 py-2 border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 rounded-md" %>
+            <% end %>
+          <% end %>
+          
+          <% if @deliveries.current_page < @deliveries.total_pages %>
+            <%= link_to "次へ", deliveries_path(page: @deliveries.current_page + 1), 
+                class: "px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
   <% end %>
 </div>

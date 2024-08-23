@@ -2,7 +2,7 @@ class DeliveriesController < ApplicationController
   before_action :set_delivery, only: [:show, :edit, :update, :destroy]
 
   def index
-    @deliveries = current_user.deliveries.recent
+    @deliveries = current_user.deliveries.recent.page(params[:page]).per(50)
   end
 
   def show
