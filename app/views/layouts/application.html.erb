@@ -19,7 +19,34 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <!-- Flash messages -->
+    <% if notice %>
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 mx-4 mt-4">
+        <%= notice %>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 mx-4 mt-4">
+        <%= alert %>
+      </div>
+    <% end %>
+
+    <!-- Navigation -->
+    <% if user_signed_in? %>
+      <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+          <h1 class="text-xl font-bold">配達管理アプリ</h1>
+          <div class="flex space-x-4">
+            <%= link_to "ダッシュボード", dashboard_index_path, class: "hover:text-blue-200" %>
+            <%= link_to "配達記録", deliveries_path, class: "hover:text-blue-200" %>
+            <%= link_to "新規記録", new_delivery_path, class: "hover:text-blue-200" %>
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "hover:text-blue-200" %>
+          </div>
+        </div>
+      </nav>
+    <% end %>
+
+    <main class="container mx-auto px-5 py-8">
       <%= yield %>
     </main>
   </body>
