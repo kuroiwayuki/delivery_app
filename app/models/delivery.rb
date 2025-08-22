@@ -5,6 +5,7 @@ class Delivery < ApplicationRecord
   validates :delivered_at, presence: true
   validates :price_yen, presence: true, numericality: { greater_than: 0 }
   validates :duration_min, presence: true, numericality: { greater_than: 0 }
+  validates :store_name, presence: true
 
   scope :recent, -> { order(delivered_at: :desc) }
   scope :by_user, ->(user) { where(user: user) }
@@ -12,4 +13,6 @@ class Delivery < ApplicationRecord
   scope :in_period, ->(from_date, to_date) do
     where(delivered_at: from_date..to_date) if from_date.present? && to_date.present?
   end
+  scope :by_store_name, ->(store_name) { where("store_name ILIKE ?", "%#{store_name}%") if store_name.present? }
+  scope :distinct_store_names, -> { distinct.pluck(:store_name).compact.sort }
 end

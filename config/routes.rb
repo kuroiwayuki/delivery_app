@@ -23,6 +23,10 @@ Rails.application.routes.draw do
     root "dashboard#index", as: :authenticated_root
   end
 
-  resources :deliveries
+  resources :deliveries do
+    collection do
+      get :store_suggestions
+    end
+  end
   get "dashboard/index"
 end
