@@ -4,11 +4,18 @@
 
 import { application } from "./application"
 
+console.log('=== Loading Stimulus Controllers ===')
+
 import FilterModalController from "./filter_modal_controller"
 application.register("filter-modal", FilterModalController)
+console.log('✅ FilterModalController registered successfully')
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+console.log('✅ HelloController registered successfully')
 
 import StoreSuggestionsController from "./store_suggestions_controller"
 application.register("store-suggestions", StoreSuggestionsController)
+console.log('✅ StoreSuggestionsController registered successfully')
+
+console.log('=== All Controllers Loaded ===')
