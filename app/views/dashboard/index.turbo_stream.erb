@@ -1,0 +1,18 @@
+<%= turbo_stream.update "dashboard-content" do %>
+  <%= render 'dashboard_content', deliveries: @deliveries, all_deliveries: @all_deliveries, areas: @areas %>
+<% end %>
+
+<%= turbo_stream.update "filter-form" do %>
+  <%= render 'filter_form', areas: @areas %>
+<% end %>
+
+<script>
+  // モーダルを閉じる
+  const modal = document.getElementById('filter-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+</script>
+
+

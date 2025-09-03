@@ -1,0 +1,53 @@
+<%= form_with url: dashboard_path, method: :get, local: false, 
+    data: { turbo_frame: "dashboard-content" } do |form| %>
+  
+  <div class="space-y-4">
+    <!-- 期間フィルタ -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">期間</label>
+      <div class="grid grid-cols-2 gap-2">
+        <%= form.date_field :date_from, 
+            value: params[:date_from],
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
+        <%= form.date_field :date_to, 
+            value: params[:date_to],
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+    </div>
+
+    <!-- 地区フィルタ -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">地区</label>
+      <%= form.select :area_ids, 
+          options_from_collection_for_select(areas, :id, :name, params[:area_ids]), 
+          { include_blank: "すべて" }, 
+          { multiple: true, 
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500",
+            size: 4 } %>
+      <p class="text-xs text-gray-500 mt-1">Ctrl+クリックで複数選択</p>
+    </div>
+
+    <!-- 店舗名フィルタ -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">店舗名</label>
+      <%= form.text_field :store_name, 
+          value: params[:store_name],
+          class: "w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500",
+          placeholder: "店舗名で検索" %>
+    </div>
+  </div>
+
+  <div class="flex space-x-3 mt-6">
+    <%= form.submit "適用", 
+        class: "flex-1 bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+    <%= link_to "クリア", dashboard_path, 
+        class: "flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500" %>
+    <button type="button" 
+            class="flex-1 bg-white text-gray-700 px-4 py-2 rounded-md text-sm border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            data-action="click->filter-modal#close">
+      キャンセル
+    </button>
+  </div>
+<% end %>
+
+
