@@ -1,12 +1,21 @@
 class DashboardController < ApplicationController
   def index
-    @deliveries = current_user.deliveries.recent.limit(200)
+    @deliveries = current_user.deliveries.recent
     @areas = Area.ordered
     
-    # 非同期リクエストの場合のみフィルタを適用
-    if request.xhr?
-      apply_filters
-      render partial: 'dashboard_content', locals: { deliveries: @deliveries, areas: @areas }
+    # フィルタを適用
+    apply_filters
+    
+    # KPI用の全件データを保存
+    @all_deliveries = @deliveries
+    
+    # ページネーションを適用
+    @deliveries = @deliveries.page(params[:page]).per(50)
+    
+    # Turbo Frameリクエストの場合は部分テンプレートをレンダー
+    respond_to do |format|
+      format.html
+      format.turbo_stream
     end
   end
 
