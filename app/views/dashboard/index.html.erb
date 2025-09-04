@@ -5,8 +5,8 @@
         class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200" %>
   </div>
 
-  <!-- Dashboard Content -->
-  <div id="dashboard-content">
+  <!-- Turbo Frameで検索結果を管理 -->
+  <turbo-frame id="dashboard-content">
     <%= render 'dashboard_content', deliveries: @deliveries, all_deliveries: @all_deliveries, areas: @areas %>
-  </div>
+  </turbo-frame>
 </div>
