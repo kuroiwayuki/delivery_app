@@ -23,10 +23,10 @@ Rails.application.routes.draw do
     root "dashboard#index", as: :authenticated_root
   end
 
-  resources :deliveries do
+  resources :deliveries, except: [:index] do
     collection do
       get :store_suggestions
     end
   end
-  get "dashboard/index"
+  get "dashboard/index", as: :dashboard
 end
