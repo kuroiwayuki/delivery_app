@@ -1,9 +1,6 @@
 class DeliveriesController < ApplicationController
   before_action :set_delivery, only: [:show, :edit, :update, :destroy]
 
-  def index
-    @deliveries = current_user.deliveries.recent.page(params[:page]).per(50)
-  end
 
   def show
   end
@@ -39,7 +36,7 @@ class DeliveriesController < ApplicationController
 
   def destroy
     @delivery.destroy
-    redirect_to deliveries_url, notice: '配達記録を削除しました。'
+    redirect_to dashboard_path, notice: '配達記録を削除しました。'
   end
 
   def store_suggestions
