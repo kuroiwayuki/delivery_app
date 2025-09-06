@@ -40,7 +40,7 @@
             <%= link_to "ダッシュボード", dashboard_index_path, class: "hover:text-blue-200" %>
             <%= link_to "配達記録", deliveries_path, class: "hover:text-blue-200" %>
             <%= link_to "新規記録", new_delivery_path, class: "hover:text-blue-200" %>
-            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "hover:text-blue-200" %>
+            <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "bg-transparent border-none text-white hover:text-blue-200 cursor-pointer" %>
           </div>
         </div>
       </nav>
