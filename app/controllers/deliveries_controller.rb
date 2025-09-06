@@ -42,6 +42,14 @@ class DeliveriesController < ApplicationController
     redirect_to deliveries_url, notice: '配達記録を削除しました。'
   end
 
+  def store_suggestions
+    query = params[:q]
+    suggestions = current_user.deliveries.distinct_store_names
+    suggestions = suggestions.select { |name| name.downcase.include?(query.downcase) } if query.present?
+    
+    render json: suggestions.first(10)
+  end
+
   private
 
   def set_delivery
@@ -49,6 +57,6 @@ class DeliveriesController < ApplicationController
   end
 
   def delivery_params
-    params.require(:delivery).permit(:area_id, :delivered_at, :price_yen, :duration_min, :memo)
+    params.require(:delivery).permit(:area_id, :delivered_at, :price_yen, :duration_min, :memo, :store_name)
   end
 end

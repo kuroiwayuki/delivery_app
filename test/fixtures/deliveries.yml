@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  area: one
+  delivered_at: 2025-09-16 13:27:56
+  price_yen: 1
+  duration_min: 1
+  memo: MyText
+
+two:
+  user: two
+  area: two
+  delivered_at: 2025-09-16 13:27:56
+  price_yen: 1
+  duration_min: 1
+  memo: MyText
