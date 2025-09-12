@@ -1,0 +1,51 @@
+<%= form_with(model: delivery, local: true, class: "space-y-6") do |form| %>
+  <% if delivery.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <h2 class="font-bold">エラーが発生しました:</h2>
+      <ul class="list-disc list-inside">
+        <% delivery.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :area_id, "地区", class: "block text-sm font-medium text-gray-700 mb-2" %>
+    <%= form.select :area_id, 
+        options_from_collection_for_select(@areas, :id, :name, delivery.area_id),
+        { prompt: "地区を選択してください" },
+        { class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" } %>
+  </div>
+
+  <div>
+    <%= form.label :delivered_at, "配達日時", class: "block text-sm font-medium text-gray-700 mb-2" %>
+    <%= form.datetime_local_field :delivered_at, 
+        value: delivery.delivered_at&.strftime("%Y-%m-%dT%H:%M"),
+        class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
+  </div>
+
+  <div>
+    <%= form.label :price_yen, "料金（円）", class: "block text-sm font-medium text-gray-700 mb-2" %>
+    <%= form.number_field :price_yen, 
+        class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
+  </div>
+
+  <div>
+    <%= form.label :duration_min, "配達時間（分）", class: "block text-sm font-medium text-gray-700 mb-2" %>
+    <%= form.number_field :duration_min, 
+        class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
+  </div>
+
+  <div>
+    <%= form.label :memo, "メモ", class: "block text-sm font-medium text-gray-700 mb-2" %>
+    <%= form.text_area :memo, rows: 3,
+        class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
+  </div>
+
+  <div class="flex space-x-4">
+    <%= form.submit class: "bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200" %>
+    <%= link_to "キャンセル", deliveries_path, 
+        class: "bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition duration-200" %>
+  </div>
+<% end %>
