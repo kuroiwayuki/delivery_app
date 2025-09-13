@@ -1,0 +1,15 @@
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+  <div class="p-8">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">配達管理アプリ</h1>
+      <p class="text-gray-600 mb-8">日々の配達記録を管理しましょう</p>
+      
+      <div class="space-y-4">
+        <%= link_to "ログイン", new_user_session_path, 
+            class: "w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 block text-center" %>
+        <%= link_to "新規登録", new_user_registration_path, 
+            class: "w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-200 block text-center" %>
+      </div>
+    </div>
+  </div>
+</div>
