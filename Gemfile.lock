@@ -309,7 +309,7 @@ GEM
     tailwindcss-ruby (3.4.17-x86_64-linux)
     thor (1.4.0)
     timeout (0.4.3)
-    turbo-rails (2.0.16)
+    turbo-rails (2.0.17)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     tzinfo (2.0.6)
