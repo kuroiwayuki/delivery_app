@@ -1,8 +1,7 @@
 <%= form_with url: dashboard_path, method: :get, local: false, 
-    data: { turbo_frame: "dashboard-content" } do |form| %>
+    data: { turbo_frame: "dashboard-content", action: "turbo:submit-end->filter-modal#submitted" } do |form| %>
   
   <div class="space-y-4">
-    <!-- 期間フィルタ -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-2">期間</label>
       <div class="grid grid-cols-2 gap-2">
@@ -15,7 +14,6 @@
       </div>
     </div>
 
-    <!-- 地区フィルタ -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-2">地区</label>
       <%= form.select :area_ids, 
@@ -27,7 +25,7 @@
       <p class="text-xs text-gray-500 mt-1">Ctrl+クリックで複数選択</p>
     </div>
 
-    <!-- 店舗名フィルタ -->
+
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-2">店舗名</label>
       <%= form.text_field :store_name, 

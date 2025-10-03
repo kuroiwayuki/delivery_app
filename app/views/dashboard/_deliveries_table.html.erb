@@ -14,7 +14,9 @@
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
         <% deliveries.each do |delivery| %>
-          <tr>
+          <tr class="hover:bg-gray-50 cursor-pointer" 
+              data-action="click->table-row#navigate" 
+              data-url="<%= delivery_path(delivery) %>">
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
               <%= delivery.delivered_at.strftime("%Y/%m/%d %H:%M") %>
             </td>
@@ -33,11 +35,13 @@
             <td class="px-6 py-4 text-sm text-gray-900">
               <%= truncate(delivery.memo, length: 30) if delivery.memo.present? %>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-              <%= link_to "詳細", delivery, class: "text-blue-600 hover:text-blue-900" %>
-              <%= link_to "編集", edit_delivery_path(delivery), class: "text-indigo-600 hover:text-indigo-900" %>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" 
+                data-action="click->table-row#stopPropagation">
               <%= link_to "削除", delivery, method: :delete, 
-                  data: { confirm: "削除してもよろしいですか？" }, 
+                  data: { 
+                    confirm: "削除してもよろしいですか？",
+                    turbo_frame: "_top"
+                  }, 
                   class: "text-red-600 hover:text-red-900" %>
             </td>
           </tr>
@@ -50,10 +54,11 @@
     <div class="text-center py-12">
       <p class="text-gray-500 text-lg">配達記録がありません。</p>
       <%= link_to "最初の記録を作成", new_delivery_path, 
+          data: { turbo_frame: "_top" },
           class: "mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200" %>
     </div>
   <% else %>
-    <!-- Pagination -->
+    <!-- ページネーション -->
     <div class="bg-white border-t border-gray-200 px-6 py-4">
       <div class="flex items-center justify-between">
         <div class="text-sm text-gray-700">
@@ -62,6 +67,7 @@
         <div class="flex items-center space-x-2">
           <% if deliveries.current_page > 1 %>
             <%= link_to "前へ", dashboard_path(page: deliveries.current_page - 1), 
+                data: { turbo_frame: "_top" },
                 class: "px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" %>
           <% end %>
 
@@ -72,12 +78,14 @@
               </span>
             <% else %>
               <%= link_to page, dashboard_path(page: page), 
+                  data: { turbo_frame: "_top" },
                   class: "px-3 py-2 border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 rounded-md" %>
             <% end %>
           <% end %>
 
           <% if deliveries.current_page < deliveries.total_pages %>
             <%= link_to "次へ", dashboard_path(page: deliveries.current_page + 1), 
+                data: { turbo_frame: "_top" },
                 class: "px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" %>
           <% end %>
         </div>
@@ -85,5 +93,3 @@
     </div>
   <% end %>
 </turbo-frame>
-
-
