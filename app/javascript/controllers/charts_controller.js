@@ -2,86 +2,77 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["areaDeliveryChart", "areaPriceChart"]
+  static values = { update: Boolean }
 
   connect() {
-    console.log('ChartsController connected!')
-    console.log('Chart.js available:', typeof Chart !== 'undefined')
-    
-    // 既に初期化済みの場合はスキップ
-    if (this.initialized) {
-      console.log('Charts already initialized, skipping...')
+    // 重複初期化の回避
+    if (window.chartsInitialized && !this.updateValue) {
       return
     }
 
     this.initialized = true
+    window.chartsInitialized = true
+    this.retryCount = 0
+    this.maxRetries = 20
     this.initializeChartsWithDelay()
   }
 
   disconnect() {
-    console.log('ChartsController disconnected!')
     this.destroyCharts()
     this.initialized = false
+    window.chartsInitialized = false
+    this.retryCount = 0
   }
 
   initializeChartsWithDelay() {
-    // Chart.jsの読み込みを待つ
     if (typeof Chart === 'undefined') {
-      console.log('Waiting for Chart.js to load...')
-      setTimeout(() => {
-        this.initializeChartsWithDelay()
-      }, 100)
+      this.retryCount++
+      if (this.retryCount < this.maxRetries) {
+        setTimeout(() => {
+          this.initializeChartsWithDelay()
+        }, 100)
+      } else {
+        console.warn('Chart.js failed to load after maximum retries')
+      }
     } else {
-      console.log('Chart.js is now available!')
-      setTimeout(() => {
-        this.initializeCharts()
-      }, 100)
+      this.initializeCharts()
     }
   }
 
   initializeCharts() {
-    console.log('Initializing charts...')
-    
-    // 既存のチャートを破棄
+    // 既存チャートを破棄してから描画
     this.destroyCharts()
 
-    // Area Delivery Count Chart
     if (this.hasAreaDeliveryChartTarget) {
       this.createAreaDeliveryChart()
     }
 
-    // Area Average Price Chart
     if (this.hasAreaPriceChartTarget) {
       this.createAreaPriceChart()
     }
   }
 
   destroyCharts() {
-    console.log('Destroying existing charts...')
-    if (window.areaDeliveryChart) {
-      window.areaDeliveryChart.destroy()
-      window.areaDeliveryChart = null
+    if (this.areaDeliveryChart) {
+      this.areaDeliveryChart.destroy()
+      this.areaDeliveryChart = null
     }
-    if (window.areaPriceChart) {
-      window.areaPriceChart.destroy()
-      window.areaPriceChart = null
+    if (this.areaPriceChart) {
+      this.areaPriceChart.destroy()
+      this.areaPriceChart = null
     }
   }
 
   createAreaDeliveryChart() {
     const ctx = this.areaDeliveryChartTarget
     if (!ctx) {
-      console.log('Area delivery chart canvas not found')
       return
     }
 
-    console.log('Creating area delivery chart...')
     const data = JSON.parse(ctx.dataset.chartData || '{}')
-    console.log('Chart data:', data)
 
     if (Object.keys(data).length === 0) {
-      console.log('No data available for area delivery chart - showing empty chart')
-      // 空のチャートを表示
-      window.areaDeliveryChart = new Chart(ctx, {
+      this.areaDeliveryChart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: ['データなし'],
@@ -105,7 +96,7 @@ export default class extends Controller {
       return
     }
 
-    window.areaDeliveryChart = new Chart(ctx, {
+    this.areaDeliveryChart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: Object.keys(data),
@@ -140,13 +131,11 @@ export default class extends Controller {
         maintainAspectRatio: true,
         aspectRatio: 2,
         animation: {
-          duration: 800,
-          easing: 'easeInOutQuart'
+          duration: 0,
+          easing: 'easeOutQuart'
         },
         plugins: {
-          legend: {
-            display: false
-          },
+          legend: { display: false },
           tooltip: {
             backgroundColor: 'rgba(0, 0, 0, 0.8)',
             titleColor: 'white',
@@ -156,36 +145,16 @@ export default class extends Controller {
             callbacks: {
               label: function(context) {
                 let label = context.dataset.label || '';
-                if (label) {
-                  label += ': ';
-                }
-                if (context.parsed.y !== null) {
-                  label += context.parsed.y.toLocaleString();
-                }
+                if (label) label += ': ';
+                if (context.parsed.y !== null) label += context.parsed.y.toLocaleString();
                 return label;
               }
             }
           }
         },
         scales: {
-          x: {
-            grid: {
-              display: false
-            },
-            ticks: {
-              color: '#6B7280'
-            }
-          },
-          y: {
-            beginAtZero: true,
-            ticks: {
-              precision: 0,
-              color: '#6B7280'
-            },
-            grid: {
-              color: 'rgba(200, 200, 200, 0.2)'
-            }
-          }
+          x: { grid: { display: false }, ticks: { color: '#6B7280' } },
+          y: { beginAtZero: true, ticks: { precision: 0, color: '#6B7280' }, grid: { color: 'rgba(200, 200, 200, 0.2)' } }
         }
       }
     })
@@ -194,18 +163,13 @@ export default class extends Controller {
   createAreaPriceChart() {
     const ctx = this.areaPriceChartTarget
     if (!ctx) {
-      console.log('Area price chart canvas not found')
       return
     }
 
-    console.log('Creating area price chart...')
     const data = JSON.parse(ctx.dataset.chartData || '{}')
-    console.log('Chart data:', data)
 
     if (Object.keys(data).length === 0) {
-      console.log('No data available for area price chart - showing empty chart')
-      // 空のチャートを表示
-      window.areaPriceChart = new Chart(ctx, {
+      this.areaPriceChart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: ['データなし'],
@@ -229,7 +193,7 @@ export default class extends Controller {
       return
     }
 
-    window.areaPriceChart = new Chart(ctx, {
+    this.areaPriceChart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: Object.keys(data),
@@ -264,13 +228,11 @@ export default class extends Controller {
         maintainAspectRatio: true,
         aspectRatio: 2,
         animation: {
-          duration: 800,
-          easing: 'easeInOutQuart'
+          duration: 0,
+          easing: 'easeOutQuart'
         },
         plugins: {
-          legend: {
-            display: false
-          },
+          legend: { display: false },
           tooltip: {
             backgroundColor: 'rgba(0, 0, 0, 0.8)',
             titleColor: 'white',
@@ -280,38 +242,16 @@ export default class extends Controller {
             callbacks: {
               label: function(context) {
                 let label = context.dataset.label || '';
-                if (label) {
-                  label += ': ';
-                }
-                if (context.parsed.y !== null) {
-                  label += '¥' + context.parsed.y.toLocaleString();
-                }
+                if (label) label += ': ';
+                if (context.parsed.y !== null) label += '¥' + context.parsed.y.toLocaleString();
                 return label;
               }
             }
           }
         },
         scales: {
-          x: {
-            grid: {
-              display: false
-            },
-            ticks: {
-              color: '#6B7280'
-            }
-          },
-          y: {
-            beginAtZero: true,
-            ticks: {
-              callback: function(value) {
-                return '¥' + value.toLocaleString();
-              },
-              color: '#6B7280'
-            },
-            grid: {
-              color: 'rgba(200, 200, 200, 0.2)'
-            }
-          }
+          x: { grid: { display: false }, ticks: { color: '#6B7280' } },
+          y: { beginAtZero: true, ticks: { callback: function(value) { return '¥' + value.toLocaleString() }, color: '#6B7280' }, grid: { color: 'rgba(200, 200, 200, 0.2)' } }
         }
       }
     })

@@ -4,20 +4,24 @@ export default class extends Controller {
   static targets = ["modal"]
 
   connect() {
-    console.log('FilterModalController connected!')
+    // 画面スクロールのロックを解除
+    if (document && document.body) {
+      document.body.style.overflow = "auto"
+    }
+  }
+
+  // 送信完了時にモーダルを閉じる
+  submitted() {
+    this.close()
   }
 
   open() {
-    console.log('FilterModalController open() called!')
     this.modalTarget.classList.remove("hidden")
-    document.body.style.overflow = "hidden" // スクロールを無効化
+    document.body.style.overflow = "hidden"
   }
 
   close() {
     this.modalTarget.classList.add("hidden")
-    document.body.style.overflow = "auto" // スクロールを有効化
+    document.body.style.overflow = "auto"
   }
-
-  // Turboが自動的にフォーム送信を処理するため、手動のfetchは不要
-  // フォーム送信後にモーダルを閉じる処理は、Turbo Streamで制御
 }
