@@ -18,4 +18,8 @@ import StoreSuggestionsController from "./store_suggestions_controller"
 application.register("store-suggestions", StoreSuggestionsController)
 console.log('✅ StoreSuggestionsController registered successfully')
 
+import ChartsController from "./charts_controller"
+application.register("charts", ChartsController)
+console.log('✅ ChartsController registered successfully')
+
 console.log('=== All Controllers Loaded ===')

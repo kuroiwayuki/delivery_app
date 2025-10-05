@@ -18,6 +18,27 @@
   </div>
 </div>
 
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6" data-controller="charts">
+  <!-- Area Delivery Count Chart -->
+  <div class="bg-white p-6 rounded-lg shadow">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">地区別配達件数</h3>
+    <div class="relative h-64">
+      <canvas data-charts-target="areaDeliveryChart" 
+              data-chart-data="<%= @area_delivery_counts.to_json %>"></canvas>
+    </div>
+  </div>
+
+  <!-- Area Average Price Chart -->
+  <div class="bg-white p-6 rounded-lg shadow">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">地区別平均単価</h3>
+    <div class="relative h-64">
+      <canvas data-charts-target="areaPriceChart" 
+              data-chart-data="<%= @area_avg_prices.to_json %>"></canvas>
+    </div>
+  </div>
+</div>
+
 <!-- Recent Deliveries with Filter Modal -->
 <div class="bg-white rounded-lg shadow" data-controller="filter-modal">
   <div class="px-6 py-4 border-b border-gray-200">
